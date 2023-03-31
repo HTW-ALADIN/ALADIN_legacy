@@ -1,0 +1,200 @@
+{
+    "API": [
+        {
+            "task": "shortestpath",
+            "name": "generateSP",
+            "httpMethod": "post",
+            "params": { "parameters": "object" }
+        }
+    ],
+    "Worker": {
+        "shortestpathTask": {
+            "minConsumers": 1,
+            "consumerInstructions": {
+                "generateSP": {
+                    "dependencies": ["ShortestPathTaskGenerator"],
+                    "body": "async (taskDescription) => { let result = {}; try { const g = new ShortestPathTaskGenerator(taskDescription.parameters); result = g.generateShortestPathTask(); } catch (error) { console.error(error); result = error; } return result; }"
+                }
+            }
+        }
+    },
+    "UI": {
+        "taskData": {},
+        "rootNode": 0,
+        "topology": [[0, null, null]],
+        "edges": {
+            "0": [1],
+            "1": []
+        },
+        "currentNode": 0,
+        "nodes": {
+            "0": {
+                "zoomScale": 1,
+                "layouts": {
+                    "sm": [{ "x": 12, "y": 5, "w": 2, "h": 5, "i": 1, "static": false }],
+                    "md": [{ "x": 0, "y": 10, "w": 2, "h": 5, "i": 1, "static": false }],
+                    "lg": [
+                        { "x": 32, "y": 29, "w": 4, "h": 4, "i": 0, "static": false },
+                        { "x": 36, "y": 29, "w": 2, "h": 2, "i": 1, "static": false }
+                    ]
+                },
+                "components": {
+                    "0": {
+                        "type": "DOTGraph",
+                        "name": "Shortest Path",
+                        "isValid": true,
+                        "dependencies": {
+                            "DOTGraph": { "dotDescription": "taskData__dotDescription" }
+                        }
+                    },
+                    "1": {
+                        "type": "TaskConfiguration",
+                        "name": "Konfiguration",
+                        "isValid": true,
+                        "component": {
+                            "title": "Parameter Konfiguration",
+                            "actions": [
+                                {
+                                    "instruction": "generateSP",
+                                    "type": "fetchData",
+                                    "label": "Generieren!",
+                                    "dependsOn": ["nodeRange", "degreeRange", "hasTarget", "seed"]
+                                }
+                            ],
+                            "form": {
+                                "nodeRange": {
+                                    "formType": "RangeFormField",
+                                    "label": "Knotenanzahl",
+                                    "description": "Bestimmt die Anzahl an Knoten",
+                                    "initial": {
+                                        "lowerValue": 5,
+                                        "upperValue": 10
+                                    },
+                                    "boundaries": { "min": 3, "max": 50 },
+                                    "presets": {
+                                        "easy": 1,
+                                        "medium": 1,
+                                        "hard": 1
+                                    }
+                                },
+                                "degreeRange": {
+                                    "formType": "RangeFormField",
+                                    "label": "&Oslash; Knotengrad",
+                                    "type": "number",
+                                    "description": "Bestimmt den durchschnittlichen Grad an Kanten je Knoten",
+                                    "initial": {
+                                        "lowerValue": 3,
+                                        "upperValue": 5
+                                    },
+                                    "boundaries": { "min": 1, "max": 30 },
+                                    "presets": {
+                                        "easy": 5,
+                                        "medium": 20,
+                                        "hard": 50
+                                    }
+                                },
+                                "hasTarget": {
+                                    "formType": "CheckboxFormField",
+                                    "label": "Zielknoten",
+                                    "type": "checkbox",
+                                    "initial": false,
+                                    "description": "Bestimmt ob ein Zielknoten generiert wird oder nicht",
+                                    "presets": {
+                                        "easy": false,
+                                        "medium": true,
+                                        "hard": true
+                                    }
+                                },
+                                "seed": {
+                                    "formType": "ValueFormField",
+                                    "label": "Seed",
+                                    "type": "text",
+                                    "description": "Setze einen beliebigen Wert um die Generierung deterministisch und reproduzierbar zu machen",
+                                    "value": "",
+                                    "validate": false,
+                                    "presets": {
+                                        "easy": "",
+                                        "medium": "",
+                                        "hard": ""
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "1": {
+                "zoomScale": 1,
+                "layouts": {
+                    "sm": [{ "x": 12, "y": 5, "w": 2, "h": 5, "i": 1, "static": false }],
+                    "md": [{ "x": 0, "y": 10, "w": 2, "h": 5, "i": 1, "static": false }],
+                    "lg": [
+                        { "x": 32, "y": 28, "w": 10, "h": 2, "i": 0, "static": false },
+                        { "x": 32, "y": 30, "w": 4, "h": 3, "i": 1, "static": false }
+                    ]
+                },
+                "components": {
+                    "0": {
+                        "type": "DijkstraTable",
+                        "name": "Dijkstra",
+                        "isValid": false,
+                        "dependencies": {
+                            "DijkstraTable": {
+                                "nodes": "taskData__nodes",
+                                "initialRow": "taskData__initialRow",
+                                "initialControls": "taskData__controlObject"
+                            }
+                        },
+                        "methods": { "solveStep": "Nächste Iteration" },
+                        "component": {
+                            "userRows": [],
+                            "currentNode": null,
+                            "labels": {
+                                "iteration": "Iteration",
+                                "cost": "Kosten",
+                                "predecessor": "Vorgänger",
+                                "overview": "Übersicht",
+                                "queue": "Warteschlange",
+                                "done": "Erledigt",
+                                "chosen": "Ausgewählt",
+                                "successor": "Nachfolger"
+                            },
+                            "colorCoding": {
+                                "queue": "orange",
+                                "done": "green",
+                                "chosen": "red",
+                                "successor": "yellow"
+                            },
+                            "controlObject": {
+                                "queue": [],
+                                "done": [],
+                                "chosen": [],
+                                "successor": []
+                            }
+                        }
+                    },
+                    "1": {
+                        "type": "DijkstraGraph",
+                        "name": "Shortest Path",
+                        "isValid": true,
+                        "component": {
+                            "colorCoding": {
+                                "queue": "orange",
+                                "done": "green",
+                                "chosen": "red",
+                                "successor": "yellow"
+                            }
+                        },
+                        "dependencies": {
+                            "DOTGraph": { "dotDescription": "taskData__dotDescription" },
+                            "DijkstraGraph": {
+                                "controlObject": "nodes__1__components__0__component__controlObject",
+                                "nodes": "taskData__nodes"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

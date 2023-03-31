@@ -1,0 +1,125 @@
+{
+    "API": [
+        {
+            "task": "epk",
+            "name": "generateEPK",
+            "httpMethod": "post",
+            "params": { "parameters": "object" }
+        }
+    ],
+    "Worker": {
+        "epkTask": {
+            "minConsumers": 1,
+            "consumerInstructions": {
+                "generateEPK": {
+                    "dependencies": ["EPKTaskGenerator"],
+                    "body": "async (taskDescription) => { let result = {}; try { const g = new EPKTaskGenerator(); result = g.generateTask(taskDescription.parameters); } catch (error) { console.error(error); result = error; } return result; }"
+                }
+            }
+        }
+    },
+    "UI": {
+        "taskData": {},
+        "rootNode": 0,
+        "topology": [[0, null, null]],
+        "edges": {
+            "0": []
+        },
+        "currentNode": 0,
+        "nodes": {
+            "0": {
+                "zoomScale": 1,
+                "layouts": {
+                    "sm": [{ "x": 12, "y": 5, "w": 2, "h": 5, "i": 1, "static": false }],
+                    "md": [{ "x": 0, "y": 10, "w": 2, "h": 5, "i": 1, "static": false }],
+                    "lg": [
+                        { "x": 32, "y": 29, "w": 4, "h": 4, "i": 0, "static": false },
+                        { "x": 36, "y": 29, "w": 2, "h": 2, "i": 1, "static": false }
+                    ]
+                },
+                "components": {
+                    "0": {
+                        "type": "DOTGraph",
+                        "name": "EPK",
+                        "isValid": true,
+                        "dependencies": {
+                            "DOTGraph": { "dotDescription": "taskData__dotDescription" }
+                        }
+                    },
+                    "1": {
+                        "type": "TaskConfiguration",
+                        "name": "Konfiguration",
+                        "isValid": true,
+                        "component": {
+                            "title": "Parameter Konfiguration",
+                            "actions": [
+                                {
+                                    "instruction": "generateEPK",
+                                    "type": "fetchData",
+                                    "label": "Generieren!",
+                                    "dependsOn": ["nodeRange", "degreeRange", "hasTarget", "seed"]
+                                }
+                            ],
+                            "form": {
+                                "maxDepth": {
+                                    "formType": "ValueFormField",
+                                    "label": "Tiefe",
+                                    "type": "number",
+                                    "value": "5",
+                                    "boundaries": { "min": 5, "max": 20 },
+                                    "validate": true,
+                                    "presets": {
+                                        "easy": "",
+                                        "medium": "",
+                                        "hard": ""
+                                    }
+                                },
+                                "rootVertices": {
+                                    "formType": "ValueFormField",
+                                    "label": "Wurzelknoten",
+                                    "type": "number",
+                                    "value": "2",
+                                    "boundaries": { "min": 1, "max": 5 },
+                                    "validate": true,
+                                    "presets": {
+                                        "easy": "",
+                                        "medium": "",
+                                        "hard": ""
+                                    }
+                                },
+                                "trendRange": {
+                                    "formType": "RangeFormField",
+                                    "label": "Wahrscheinlichkeiten",
+                                    "type": "number",
+                                    "boundaries": { "min": 0, "max": 1 },
+                                    "step": 0.05,
+                                    "initial": {
+                                        "lowerValue": 0.15,
+                                        "upperValue": 0.7
+                                    },
+                                    "presets": {
+                                        "easy": [2, 10],
+                                        "medium": 3,
+                                        "hard": 5
+                                    }
+                                },
+                                "seed": {
+                                    "formType": "ValueFormField",
+                                    "label": "Seed",
+                                    "type": "text",
+                                    "value": "",
+                                    "validate": false,
+                                    "presets": {
+                                        "easy": "",
+                                        "medium": "",
+                                        "hard": ""
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

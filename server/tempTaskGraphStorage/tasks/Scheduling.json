@@ -1,0 +1,306 @@
+{
+    "API": [
+        {
+            "task": "scheduling",
+            "name": "generateTask",
+            "httpMethod": "post",
+            "params": { "parameters": "object" }
+        }
+    ],
+    "Worker": {
+        "schedulingTask": {
+            "minConsumers": 1,
+            "consumerInstructions": {
+                "generateTask": {
+                    "dependencies": ["SchedulingTaskGenerator"],
+                    "body": "async (taskDescription) => { let result = {}; try { const g = new SchedulingTaskGenerator(); result = g.generateTask(taskDescription.parameters); } catch (error) { console.error(error); result = error; } return result; }"
+                }
+            }
+        }
+    },
+    "UI": {
+        "taskData": {},
+        "rootNode": 0,
+        "topology": [[0, null, null]],
+        "edges": {
+            "0": [1],
+            "1": [2, 4],
+            "2": [3],
+            "3": [],
+            "4": []
+        },
+        "currentNode": 0,
+        "nodes": {
+            "0": {
+                "zoomScale": 1,
+                "layouts": {
+                    "sm": [{ "x": 12, "y": 5, "w": 2, "h": 5, "i": 1, "static": false }],
+                    "md": [{ "x": 0, "y": 10, "w": 2, "h": 5, "i": 1, "static": false }],
+                    "lg": [
+                        { "x": 32, "y": 29, "w": 2, "h": 2, "i": 0, "static": false },
+                        { "x": 34, "y": 29, "w": 2, "h": 4, "i": 1, "static": false }
+                    ]
+                },
+                "components": {
+                    "0": {
+                        "type": "TaskConfiguration",
+                        "name": "Konfiguration",
+                        "isValid": false,
+                        "component": {
+                            "title": "Parameter Konfiguration",
+                            "actions": [
+                                {
+                                    "instruction": "generateTask",
+                                    "type": "fetchData",
+                                    "label": "Generieren!",
+                                    "dependsOn": ["nodeAmount", "durationRange"]
+                                }
+                            ],
+                            "form": {
+                                "nodeAmount": {
+                                    "formType": "ValueFormField",
+                                    "label": "Knotenanzahl",
+                                    "type": "number",
+                                    "description": "Bestimmt die Anzahl an Vorgängen",
+                                    "boundaries": { "min": 6, "max": 26 },
+                                    "validate": true,
+                                    "value": "10",
+                                    "presets": {
+                                        "easy": "6",
+                                        "medium": "10",
+                                        "hard": "15"
+                                    }
+                                },
+                                "durationRange": {
+                                    "formType": "RangeFormField",
+                                    "label": "Dauer",
+                                    "type": "number",
+                                    "description": "Bestimmt den Wertebereich der Vorgangsdauern",
+                                    "boundaries": { "min": 0, "max": 100 },
+                                    "step": 1,
+                                    "initial": {
+                                        "lowerValue": 1,
+                                        "upperValue": 15
+                                    },
+                                    "presets": {
+                                        "easy": [1, 5],
+                                        "medium": [1, 10],
+                                        "hard": [1, 15]
+                                    }
+                                },
+                                "seed": {
+                                    "formType": "ValueFormField",
+                                    "label": "Seed",
+                                    "type": "text",
+                                    "description": "Setze einen beliebigen Wert um die Generierung deterministisch und reproduzierbar zu machen",
+                                    "value": "",
+                                    "presets": {
+                                        "easy": "",
+                                        "medium": "",
+                                        "hard": ""
+                                    },
+                                    "validate": false
+                                }
+                            }
+                        }
+                    },
+                    "1": {
+                        "type": "Output",
+                        "name": "Vorgangsliste",
+                        "isValid": true,
+                        "dependencies": {
+                            "Output": { "serverOutput": "taskData__table", "validOutput": "taskData__table" }
+                        },
+                        "component": {
+                            "header": "Vorgangsliste"
+                        }
+                    }
+                }
+            },
+            "1": {
+                "pathDescriptions": {
+                    "2": {
+                        "title": "Metra-Potential-Methode (MPM)",
+                        "image": "/img/tasks/scheduling/netzplan.png",
+                        "description": "Führe eine Auftragsterminierung anhand der Metra-Potential-Methode (MPM) durch!"
+                    },
+                    "4": {
+                        "title": "Gantt-Diagramm",
+                        "image": "/img/tasks/scheduling/gantt_diagram.png",
+                        "description": "Führe eine Auftragsterminierung anhand eines Gantt-Diagramms durch!"
+                    },
+                    "5": {
+                        "title": "Critical-Path-Methode (CPM)",
+                        "image": "/img/tasks/scheduling/gantt_diagram.png",
+                        "description": "Führe eine Auftragsterminierung anhand der Critical-Path-Methode (CPM) durch!"
+                    },
+                    "6": {
+                        "title": "Program Evaluation and Review Technique (PERT)",
+                        "image": "/img/tasks/scheduling/gantt_diagram.png",
+                        "description": "Führe eine Auftragsterminierung anhand der Program Evaluation and Review Technique (PERT) durch!"
+                    }
+                }
+            },
+            "2": {
+                "zoomScale": 1,
+                "layouts": {
+                    "sm": [{ "x": 12, "y": 5, "w": 2, "h": 5, "i": 1, "static": false }],
+                    "md": [{ "x": 0, "y": 10, "w": 2, "h": 5, "i": 1, "static": false }],
+                    "lg": [
+                        { "x": 32, "y": 29, "w": 8, "h": 4, "i": 0, "static": false },
+                        { "x": 30, "y": 29, "w": 2, "h": 4, "i": 1, "static": false }
+                    ]
+                },
+                "hints": {
+                    "active": false,
+                    "current": 0,
+                    "descriptions": [
+                        "Führe eine Strukturanalyse zur Darstellung der Prozessstruktur durch. <br>Verbinde dazu die jeweiligen Ereignise mit ihren Nachfolgern, um die Abhängigkeitsbeziehung darzustellen.",
+                        "Klicke dazu ein Ereignis an um ihn auszuwählen. Klicke nun auf ein weiteres Ereignis, um zwischen den ausgewählten Ereignissen eine Verbindung zu erstellen. Die Reihenfolge spielt hierfür eine Rolle! Um eine Verbindung zu entfernen, klicke die Ereignise in derselben Reihenfolge wie zuvor an."
+                    ]
+                },
+                "components": {
+                    "0": {
+                        "type": "PlanGraph",
+                        "name": "Netzplan",
+                        "isValid": false,
+                        "methods": { "showSolution": "Zeige Lösung" },
+                        "dependencies": {
+                            "DOTGraph": { "dotDescription": "taskData__dotVertexGraph" },
+                            "PlanGraph": { "dotDescription": "taskData__dotVertexGraph", "validation": "taskData__dummyGraph" }
+                        }
+                    },
+                    "1": {
+                        "type": "Output",
+                        "name": "Vorgangsliste",
+                        "isValid": true,
+                        "dependencies": {
+                            "Output": { "serverOutput": "taskData__table", "validOutput": "taskData__table" }
+                        },
+                        "component": {
+                            "header": "Vorgangsliste"
+                        }
+                    }
+                }
+            },
+            "3": {
+                "zoomScale": 1,
+                "layouts": {
+                    "sm": [{ "x": 12, "y": 5, "w": 2, "h": 5, "i": 1, "static": false }],
+                    "md": [{ "x": 0, "y": 10, "w": 2, "h": 5, "i": 1, "static": false }],
+                    "lg": [{ "x": 32, "y": 29, "w": 8, "h": 4, "i": 0, "static": false }]
+                },
+                "modals": [
+                    {
+                        "trigger": {
+                            "type": "success"
+                        },
+                        "content": {
+                            "header": "Herzlichen Glückwunsch!",
+                            "body": "Sie haben die Aufgabe erfolgreich gelöst!",
+                            "footer": {
+                                "buttons": [
+                                    { "type": "close", "label": "Zurück", "parameters": {} },
+                                    { "type": "route", "label": "Zur Übersicht", "parameters": { "route": "TaskOverview" } }
+                                ]
+                            }
+                        },
+                        "active": false
+                    }
+                ],
+                "hints": {
+                    "active": false,
+                    "current": 0,
+                    "descriptions": [
+                        "Führe nun eine Zeitanalyse durch. <br>Legende:<br> <ul> <li>FAZ: frühester Anfangszeitpunkt</li> <li>FEZ: frühester Endzeitpunkt</li> <li>SAZ: spätester Anfangszeitpunkt</li> <li>SEZ: spätester Endzeitpunkt</li> <li>GP: Gesamtpuffer</li> <li>FP: freier Puffer</li> </ul>",
+                        "Die Zeitanalyse ermöglicht die Ermittlung des kritischen Pfades. <br>Führe dazu zunächst eine Vorwärts- und dann eine Rückwärtskalkulation durch. <br>Ermittle anschließend die Pufferzeiten. <a href=\"https://www.modu-learn.de/verstehen/management/netzplantechnik/\" target='_blank'>Hier</a> findest du eine detaillierte Anleitung.",
+                        "Klicke die Felder der Ereignisse, welche mit einem Platzhalter versehen sind, an, um diese editieren zu können."
+                    ]
+                },
+                "components": {
+                    "0": {
+                        "type": "EditableGraph",
+                        "name": "Kalkulation",
+                        "isValid": false,
+                        "methods": { "showSolution": "Zeige Lösung" },
+                        "component": {
+                            "editableFields": ["tb", "fb", "est", "eet", "lst", "let"],
+                            "userValues": null
+                        },
+                        "dependencies": {
+                            "DOTGraph": { "dotDescription": "taskData__dummyGraph" },
+                            "EditableGraph": { "solution": "taskData__dotDescription", "validation": "taskData__graph__nodes" }
+                        }
+                    }
+                }
+            },
+            "4": {
+                "zoomScale": 1,
+                "layouts": {
+                    "sm": [{ "x": 12, "y": 5, "w": 2, "h": 5, "i": 1, "static": false }],
+                    "md": [{ "x": 0, "y": 10, "w": 2, "h": 5, "i": 1, "static": false }],
+                    "lg": [
+                        { "x": 32, "y": 29, "w": 8, "h": 4, "i": 0, "static": false },
+                        { "x": 30, "y": 29, "w": 2, "h": 4, "i": 1, "static": false }
+                    ]
+                },
+                "hints": {
+                    "active": false,
+                    "current": 0,
+                    "descriptions": [
+                        "Erstelle ein Gantt-Diagramm anhand der Vorgaben aus der Vorgangsliste. <a href=\"https://studyflix.de/wirtschaft/gantt-diagramm-659\" target=\"_blank\">Hier</a> findest du eine genaue Anleitung.",
+                        "Trage die jeweilige Vorgangsdauer in der zugehörigen Zeile ein. Vergiss dabei nicht alle Abhängigkeiten zu berücksichtigen.",
+                        "Klicke ein Feld im Raster an und ziehe die Maus entlang der x-Achse um eine Vorgangsdauer einzutragen. Um eine Vorgangsdauer zu entfernen klicke auf ein bereits gefülltes Feld und ziehe die Maus über die Felder welche du entfernen möchtest."
+                    ]
+                },
+                "modals": [
+                    {
+                        "trigger": {
+                            "type": "success"
+                        },
+                        "content": {
+                            "header": "Herzlichen Glückwunsch!",
+                            "body": "Sie haben die Aufgabe erfolgreich gelöst!",
+                            "footer": {
+                                "buttons": [
+                                    { "type": "close", "label": "Zurück", "parameters": {} },
+                                    { "type": "route", "label": "Zur Übersicht", "parameters": { "route": "TaskOverview" } }
+                                ]
+                            }
+                        },
+                        "active": false
+                    }
+                ],
+                "components": {
+                    "0": {
+                        "type": "GanttDiagram",
+                        "name": "Gantt",
+                        "isValid": false,
+                        "methods": { "showSolution": "Zeige Lösung" },
+                        "component": {
+                            "userMatrix": [],
+                            "isDrawing": false,
+                            "currentRow": null,
+                            "currentColumn": null,
+                            "isDeleting": false
+                        },
+                        "dependencies": {
+                            "GanttDiagram": { "ganttDiagram": "taskData__gantt" }
+                        }
+                    },
+                    "1": {
+                        "type": "Output",
+                        "name": "Vorgangsliste",
+                        "isValid": true,
+                        "dependencies": {
+                            "Output": { "serverOutput": "taskData__table", "validOutput": "taskData__table" }
+                        },
+                        "component": {
+                            "header": "Vorgangsliste"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

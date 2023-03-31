@@ -1,0 +1,55 @@
+{
+    "en": {
+        "startingPhrase": ["Find "],
+        "conjunctions": {
+            "&": [" and "],
+            "|": [" or "]
+        },
+        "dataTypeSelect": {
+            "bool": ["wether they are ${attribute} or not"],
+            "date": ["${attribute}"],
+            "int": ["${attribute}"],
+            "float": ["${attribute}"],
+            "varchar": ["${attribute}"]
+        },
+        "joinTemplate": {
+            "baseRelation": ["${entity} ${relation} "],
+            "addedEntity": [""],
+            "joinTypes": {
+                "OUTER JOIN": ["even if <they> do not have ${entity}"],
+                "JOIN": [""],
+                "FULL JOIN": ["even if there is no information on either ${entity1} or ${entity2}"]
+            }
+        },
+        "aggregationTemplate": {
+            "SUM": ["the sum of ${attribute}"],
+            "AVG": ["the average of ${attribute}"],
+            "MAX": ["the max of ${attribute}"],
+            "MIN": ["the min of ${attribute}"],
+            "COUNT": ["the amound of ${attribute}"]
+        },
+        "defaultOperatorTemplate": {
+            "BETWEEN": ["is between ${value1} and ${value2}"],
+            "<>": ["is unequal to"],
+            "<": ["is smaller than"],
+            ">": ["is larger than"],
+            "<=": ["is smaller or equal than"],
+            ">=": ["is bigger or equal than"],
+            "=": ["is euqal to"],
+            "LIKE": {
+                "0": ["contains '${value}'"],
+                "1": ["ends with '${value}'"],
+                "2": ["starts with '${value}'"]
+            }
+        },
+        "constraints": {},
+        "orderByTemplate": {
+            "startingPhrase": ["Order the results "],
+            "endingPhrase": ".",
+            "direction": {
+                "ASC": ["ascending"],
+                "DESC": ["descending"]
+            }
+        }
+    }
+}

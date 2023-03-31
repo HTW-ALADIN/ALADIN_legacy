@@ -1,0 +1,250 @@
+{
+    "API": [
+        {
+            "task": "geointerpolation",
+            "name": "generateGeo",
+            "httpMethod": "post",
+            "params": { "parameters": "object" }
+        }
+    ],
+    "Worker": {
+        "geointerpolationTask": {
+            "minConsumers": 1,
+            "consumerInstructions": {
+                "generateGeo": {
+                    "dependencies": ["InterpolationTaskGenerator"],
+                    "body": "async (taskDescription) => { let result = {}; try { const g = new InterpolationTaskGenerator(taskDescription.parameters); result = g.generateInterpolationTask(); } catch (error) { console.error(error); result = error; } return result; }"
+                }
+            }
+        }
+    },
+    "UI": {
+        "taskData": {},
+        "rootNode": 0,
+        "topology": [[0, null, null]],
+        "edges": {
+            "0": [1],
+            "1": []
+        },
+        "currentNode": 0,
+        "nodes": {
+            "0": {
+                "zoomScale": 1,
+                "layouts": {
+                    "sm": [{ "x": 12, "y": 5, "w": 2, "h": 5, "i": 1, "static": false }],
+                    "md": [{ "x": 0, "y": 10, "w": 2, "h": 5, "i": 1, "static": false }],
+                    "lg": [
+                        { "x": 32, "y": 29, "w": 2, "h": 2, "i": 0, "static": false },
+                        { "x": 34, "y": 29, "w": 2, "h": 2, "i": 1, "static": false },
+                        { "x": 36, "y": 29, "w": 2, "h": 2, "i": 2, "static": false }
+                    ]
+                },
+                "components": {
+                    "0": {
+                        "type": "BackgroundGraph",
+                        "name": "perlin",
+                        "isValid": true,
+                        "dependencies": {
+                            "ContourPlot": { "grid": "taskData__grid", "thresholds": "taskData__thresholds" },
+                            "DOTGraph": { "dotDescription": "taskData__dotDescription" }
+                        }
+                    },
+                    "1": {
+                        "type": "TaskConfiguration",
+                        "name": "Konfiguration",
+                        "isValid": true,
+                        "component": {
+                            "title": "Parameter Konfiguration",
+                            "actions": [
+                                {
+                                    "instruction": "generateGeo",
+                                    "type": "fetchData",
+                                    "label": "Generieren!",
+                                    "dependsOn": ["scale", "gridRange", "measurementRange", "seed"]
+                                }
+                            ],
+                            "form": {
+                                "scale": {
+                                    "formType": "RangeFormField",
+                                    "label": "Skala",
+                                    "description": "Bestimmt den Wertebereich der Skala",
+                                    "initial": {
+                                        "lowerValue": 0,
+                                        "upperValue": 1
+                                    },
+                                    "boundaries": { "min": 0, "max": 1 },
+                                    "presets": {
+                                        "easy": 1,
+                                        "medium": 1,
+                                        "hard": 1
+                                    }
+                                },
+                                "gridRange": {
+                                    "formType": "RangeFormField",
+                                    "label": "Raster",
+                                    "type": "number",
+                                    "description": "Bestimmt den Wertebereich des Rasters",
+                                    "initial": {
+                                        "lowerValue": 50,
+                                        "upperValue": 50
+                                    },
+                                    "boundaries": { "min": 2, "max": 1000 },
+                                    "presets": {
+                                        "easy": 50,
+                                        "medium": 100,
+                                        "hard": 500
+                                    }
+                                },
+                                "measurementRange": {
+                                    "formType": "RangeFormField",
+                                    "label": "Anzahl Messungen",
+                                    "type": "number",
+                                    "description": "Bestimmt den Wertebereich der Messanzahl",
+                                    "initial": {
+                                        "lowerValue": 5,
+                                        "upperValue": 10
+                                    },
+                                    "boundaries": { "min": 1, "max": 100 },
+                                    "presets": {
+                                        "easy": 5,
+                                        "medium": 20,
+                                        "hard": 50
+                                    }
+                                },
+                                "seed": {
+                                    "formType": "ValueFormField",
+                                    "label": "Seed",
+                                    "type": "text",
+                                    "description": "Setze einen beliebigen Wert um die Generierung deterministisch und reproduzierbar zu machen",
+                                    "value": "",
+                                    "validate": false,
+                                    "presets": {
+                                        "easy": "",
+                                        "medium": "",
+                                        "hard": ""
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "2": {
+                        "type": "Output",
+                        "name": "Messungen",
+                        "isValid": true,
+                        "dependencies": {
+                            "Output": {
+                                "serverOutput": "taskData__measurementPoints",
+                                "validOutput": "taskData__measurementPoints"
+                            }
+                        },
+                        "component": {
+                            "header": "Messpunkte"
+                        }
+                    }
+                }
+            },
+            "1": {
+                "zoomScale": 1,
+                "layouts": {
+                    "sm": [{ "x": 12, "y": 5, "w": 2, "h": 5, "i": 1, "static": false }],
+                    "md": [{ "x": 0, "y": 10, "w": 2, "h": 5, "i": 1, "static": false }],
+                    "lg": [
+                        { "x": 32, "y": 29, "w": 8, "h": 2, "i": 0, "static": false },
+                        { "x": 30, "y": 29, "w": 2, "h": 4, "i": 1, "static": false },
+                        { "x": 32, "y": 30, "w": 3, "h": 2, "i": 2, "static": false }
+                    ]
+                },
+                "hints": {
+                    "active": false,
+                    "current": 0,
+                    "descriptions": [
+                        "Löse die dargestellte Interpolationsgleichung indem du die Messpunkte in die Formelfelder überträgst und ausrechnest."
+                    ]
+                },
+                "interjections": [
+                    {
+                        "method": "formulaGenerator",
+                        "dependencies": {
+                            "variables": "nodes__1__components__0__component__Equation__variables",
+                            "formula": "nodes__1__components__0__component__formula",
+                            "texFormula": "nodes__1__components__0__component__texFormula",
+                            "decimals": "nodes__1__components__0__component__decimals"
+                        },
+                        "applied": false,
+                        "component_id": 0
+                    }
+                ],
+                "modals": [
+                    {
+                        "trigger": {
+                            "type": "success"
+                        },
+                        "content": {
+                            "header": "Herzlichen Glückwunsch!",
+                            "body": "Sie haben die Aufgabe erfolgreich gelöst!",
+                            "footer": {
+                                "buttons": [
+                                    { "type": "close", "label": "Zurück", "parameters": {} },
+                                    { "type": "route", "label": "Zur Übersicht", "parameters": { "route": "TaskOverview" } }
+                                ]
+                            }
+                        },
+                        "active": false
+                    }
+                ],
+                "components": {
+                    "0": {
+                        "type": "Equation",
+                        "name": "IDW",
+                        "isValid": false,
+                        "dependencies": {
+                            "Equation": { "aladinAST": "nodes__1__components__0__component__aladinAST" }
+                        },
+                        "methods": { "fillConstants": "Ergänze Konstanten", "showSolution": "Zeige Lösung" },
+                        "component": {
+                            "decimals": 2,
+                            "formula": "r = sum(v&_i/w&_i^2,i,0,n)/sum(1/w&_i^2,i,0,n)",
+                            "texFormula": "r = sum(v_i/w_i^2,i,0,n)/sum(1/w_i^2,i,0,n)",
+                            "tex": "",
+                            "Equation": {
+                                "variables": {
+                                    "w": "taskData__distances",
+                                    "p": "taskData__p",
+                                    "v": "taskData__values",
+                                    "n": "taskData__n",
+                                    "r": "taskData__result"
+                                }
+                            },
+                            "aladinAST": {},
+                            "AST": ""
+                        }
+                    },
+                    "1": {
+                        "type": "Output",
+                        "name": "Messungen",
+                        "isValid": true,
+                        "dependencies": {
+                            "Output": {
+                                "serverOutput": "taskData__measurementPoints",
+                                "validOutput": "taskData__measurementPoints"
+                            }
+                        },
+                        "component": {
+                            "header": "Messpunkte"
+                        }
+                    },
+                    "2": {
+                        "type": "TexDisplay",
+                        "name": "IDW",
+                        "isValid": true,
+                        "dependencies": {
+                            "TexDisplay": {
+                                "renderedTex": "nodes__1__components__0__component__tex"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

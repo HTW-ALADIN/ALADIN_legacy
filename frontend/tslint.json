@@ -1,0 +1,12 @@
+{
+  "defaultSeverity": "error",
+  "extends": ["tslint:recommended"],
+  "jsRules": {},
+  "rules": {
+    "trailing-comma": [false],
+    "no-unused-vars": "off",
+    "vue/no-setup-props-destructure": "off",
+    "no-setup-props-destructure": "off"
+  },
+  "rulesDirectory": []
+}

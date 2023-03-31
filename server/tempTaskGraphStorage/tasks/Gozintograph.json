@@ -1,0 +1,871 @@
+{
+    "API": [
+        {
+            "task": "gozintograph",
+            "name": "generateGraph",
+            "httpMethod": "post",
+            "params": {
+                "parameters": "object"
+            }
+        }
+    ],
+    "Worker": {
+        "gozintographTask": {
+            "minConsumers": 1,
+            "consumerInstructions": {
+                "generateGraph": {
+                    "dependencies": ["GozintographTaskGenerator"],
+                    "body": "async (taskDescription) => {let result = {};try { const g = new GozintographTaskGenerator();  result = g.generateTask(taskDescription.parameters); } catch (error) { console.error(error); result = error;} return result; }"
+                }
+            }
+        }
+    },
+    "UI": {
+        "currentTask": "gozintograph",
+        "taskData": {},
+        "rootNode": 0,
+        "previousNode": 0,
+        "topology": [
+            [0, null, null],
+            [1, 2, null],
+            [3, 4, null],
+            [5, 6, null],
+            [7, 8, null],
+            [9, null, null],
+            [10, null, null]
+        ],
+        "edges": {
+            "0": [1],
+            "1": [2, 6, 8],
+            "2": [3],
+            "3": [4],
+            "4": [5],
+            "5": [],
+            "6": [7],
+            "7": [8],
+            "8": [],
+            "9": [10],
+            "10": []
+        },
+        "currentNode": 0,
+        "nodes": {
+            "0": {
+                "zoomScale": 1,
+                "layouts": {
+                    "sm": [
+                        { "x": 12, "y": 5, "w": 3, "h": 4, "i": 0, "static": false },
+                        { "x": 10, "y": 5, "w": 2, "h": 3, "i": 1, "static": false },
+                        { "x": 12, "y": 5, "w": 2, "h": 5, "i": 2, "static": false }
+                    ],
+                    "md": [
+                        { "x": 0, "y": 0, "w": 5, "h": 6, "i": 0, "static": false },
+                        { "x": 0, "y": 5, "w": 2, "h": 3, "i": 1, "static": false },
+                        { "x": 0, "y": 10, "w": 2, "h": 5, "i": 2, "static": false }
+                    ],
+                    "lg": [
+                        { "x": 32, "y": 30, "w": 2, "h": 2, "i": 0, "static": false },
+                        { "x": 34, "y": 30, "w": 2, "h": 2, "i": 1, "static": false }
+                    ]
+                },
+                "hints": {
+                    "active": false,
+                    "current": 0,
+                    "descriptions": [
+                        "Bestimme anhand der Parameter die Komplexität des zu generierenden Gozintographen. <br> Je größer der Graph und je mehr Kanten dieser enthält, desto schwieriger wird es diesen im Folgenden zu lösen! <br><br> Du kannst beliebig viele Graphen generieren bis du einen gefunden hast der dir gefällt.",
+                        "Viel Erfolg! <br><br> <img width=\"100px;\" height=\"100px\"; src=\"https://images.emojiterra.com/twitter/512px/1f340.png\" />"
+                    ]
+                },
+                "components": {
+                    "0": {
+                        "type": "DOTGraph",
+                        "name": "Gozintograph",
+                        "isValid": true,
+                        "dependencies": { "DOTGraph": { "dotDescription": "taskData__dotDescription" } },
+                        "component": {}
+                    },
+                    "1": {
+                        "type": "TaskConfiguration",
+                        "name": "Konfiguration",
+                        "isValid": false,
+                        "component": {
+                            "title": "Parameter Konfiguration",
+                            "actions": [
+                                {
+                                    "instruction": "generateGraph",
+                                    "type": "fetchData",
+                                    "label": "Generieren!",
+                                    "dependsOn": ["nodeAmount", "edgeWeightRange", "nodeValueRange", "edgeDensity"]
+                                }
+                            ],
+                            "form": {
+                                "nodeAmount": {
+                                    "formType": "ValueFormField",
+                                    "label": "Knotenanzahl",
+                                    "type": "number",
+                                    "step": 1,
+                                    "boundaries": { "min": 5, "max": 30 },
+                                    "description": "Bestimmt die Menge der Knoten",
+                                    "value": 10,
+                                    "validate": true,
+                                    "presets": {
+                                        "easy": 5,
+                                        "medium": 10,
+                                        "hard": 20
+                                    }
+                                },
+                                "edgeWeightRange": {
+                                    "formType": "RangeFormField",
+                                    "label": "Kantengewichte",
+                                    "type": "number",
+                                    "description": "Bestimmt den Wertebereich der Kantengewichte",
+                                    "boundaries": { "min": 1, "max": 200 },
+                                    "step": 1,
+                                    "initial": {
+                                        "lowerValue": 1,
+                                        "upperValue": 10
+                                    },
+                                    "presets": {
+                                        "easy": [2, 10],
+                                        "medium": 3,
+                                        "hard": 5
+                                    }
+                                },
+                                "nodeValueRange": {
+                                    "formType": "RangeFormField",
+                                    "label": "Knotenwerte",
+                                    "type": "number",
+                                    "description": "Bestimmt den Wertebereich der Knotenwerte",
+                                    "boundaries": { "min": 1, "max": 200 },
+                                    "step": 1,
+                                    "initial": {
+                                        "lowerValue": 1,
+                                        "upperValue": 10
+                                    },
+                                    "presets": {
+                                        "easy": 2,
+                                        "medium": 3,
+                                        "hard": 5
+                                    }
+                                },
+                                "edgeDensity": {
+                                    "formType": "ValueFormField",
+                                    "label": "Kantendichte",
+                                    "type": "number",
+                                    "step": 0.01,
+                                    "boundaries": { "min": 0, "max": 1 },
+                                    "description": "Bestimmt die Anzahl an Kanten",
+                                    "value": 0.3,
+                                    "validate": true,
+                                    "presets": {
+                                        "easy": 0.2,
+                                        "medium": 0.3,
+                                        "hard": 0.5
+                                    }
+                                },
+                                "seed": {
+                                    "formType": "ValueFormField",
+                                    "label": "Seed",
+                                    "type": "text",
+                                    "description": "Setze einen beliebigen Wert um die Generierung deterministisch und reproduzierbar zu machen",
+                                    "value": "",
+                                    "validate": false,
+                                    "presets": {
+                                        "easy": "",
+                                        "medium": "",
+                                        "hard": ""
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "1": {
+                "pathDescriptions": {
+                    "2": {
+                        "title": "Vazsonyi-Verfahren",
+                        "image": "/img/tasks/gozintograph/vaszonyi.png",
+                        "description": "Berechne den Primärbedarfsvektor mithilfe der inversen Direktbedarfsmatrix!"
+                    },
+                    "6": {
+                        "title": "Matrix-Multiplikation",
+                        "image": "/img/tasks/gozintograph/matmul.png",
+                        "description": "Berechne den Primärbedarfsvektor mittels Matrixmultiplikation!"
+                    },
+                    "8": {
+                        "title": "Kanten-Zählen",
+                        "image": "/img/tasks/gozintograph/graphTraversal.png",
+                        "description": "Berechne den Primärbedarfsvektor mittels Aufsummieren des Produkts der Knotenwerte und Kantengewichte!"
+                    }
+                }
+            },
+            "2": {
+                "zoomScale": 1,
+                "layouts": {
+                    "sm": [{ "x": 12, "y": 5, "w": 2, "h": 5, "i": 2, "static": false }],
+                    "md": [{ "x": 0, "y": 10, "w": 2, "h": 5, "i": 2, "static": false }],
+                    "lg": [
+                        { "x": 32, "y": 30, "w": 2, "h": 2, "i": 0, "static": false },
+                        { "x": 34, "y": 30, "w": 2, "h": 2, "i": 1, "static": false }
+                    ]
+                },
+                "hints": {
+                    "active": false,
+                    "current": 0,
+                    "descriptions": [
+                        "Lies zunächst die Direktbedarfsmatrix aus dem Graphen ab. Diese entspricht der <a target=\"_blank\" href=\"https://de.wikipedia.org/wiki/Adjazenzmatrix\">Adjazenzmatrix</a>."
+                    ]
+                },
+                "components": {
+                    "0": {
+                        "name": "Direktbedarfsmatrix",
+                        "type": "Matrix",
+                        "isValid": false,
+                        "dependencies": { "Matrix": { "data": "taskData__adjacencyMatrix" } },
+                        "methods": { "fillZeros": "Ergänze Nullen", "showSolution": "Zeige Lösung", "copyToClipboard": "Kopieren" },
+                        "component": {
+                            "initialize": {
+                                "validation": {
+                                    "operations": [],
+                                    "paths": ["taskData__adjacencyMatrix"]
+                                },
+                                "user": {
+                                    "operations": [{ "name": "getValueInitializedMatrix", "args": [null] }],
+                                    "paths": ["taskData__adjacencyMatrix"]
+                                }
+                            },
+                            "userData": null,
+                            "validationData": null,
+                            "readOnly": false,
+                            "rowLabel": "taskData__labelVector",
+                            "columnLabel": "taskData__labelVector"
+                        }
+                    },
+                    "1": {
+                        "type": "DOTGraph",
+                        "name": "Gozintograph",
+                        "isValid": true,
+                        "dependencies": { "DOTGraph": { "dotDescription": "taskData__dotDescription" } },
+                        "component": {}
+                    }
+                }
+            },
+            "3": {
+                "zoomScale": 1,
+                "layouts": {
+                    "sm": [{ "x": 12, "y": 5, "w": 2, "h": 5, "i": 2, "static": false }],
+                    "md": [{ "x": 0, "y": 10, "w": 2, "h": 5, "i": 2, "static": false }],
+
+                    "lg": [
+                        { "x": 34, "y": 30, "w": 2, "h": 2, "i": 0, "static": false },
+                        { "x": 32, "y": 30, "w": 2, "h": 2, "i": 1, "static": false },
+                        { "x": 36, "y": 30, "w": 2, "h": 2, "i": 2, "static": false }
+                    ]
+                },
+                "hints": {
+                    "active": false,
+                    "current": 0,
+                    "descriptions": ["Bilde nun die Differenz aus der Einheitsmatrix und der Adjazenzmatrix."]
+                },
+                "components": {
+                    "0": {
+                        "name": "Direktbedarfsmatrix",
+                        "type": "Matrix",
+                        "isValid": true,
+                        "dependencies": { "Matrix": { "data": "taskData__adjacencyMatrix" } },
+                        "methods": { "copyToClipboard": "Kopieren" },
+                        "component": {
+                            "initialize": {
+                                "validation": {
+                                    "operations": [],
+                                    "paths": ["taskData__adjacencyMatrix"]
+                                },
+                                "user": {
+                                    "operations": [],
+                                    "paths": ["taskData__adjacencyMatrix"]
+                                }
+                            },
+                            "userData": null,
+                            "validationData": null,
+                            "readOnly": true,
+                            "rowLabel": "taskData__labelVector",
+                            "columnLabel": "taskData__labelVector"
+                        }
+                    },
+                    "1": {
+                        "name": "Einheitsmatrix",
+                        "type": "Matrix",
+                        "isValid": true,
+                        "dependencies": { "Matrix": { "data": "taskData__adjacencyMatrix" } },
+                        "methods": { "copyToClipboard": "Kopieren" },
+                        "component": {
+                            "initialize": {
+                                "validation": {
+                                    "operations": [{ "name": "getIdentity", "args": [null] }],
+                                    "paths": ["taskData__adjacencyMatrix"]
+                                },
+                                "user": {
+                                    "operations": [{ "name": "getIdentity", "args": [null] }],
+                                    "paths": ["taskData__adjacencyMatrix"]
+                                }
+                            },
+                            "userData": null,
+                            "validationData": null,
+                            "readOnly": true,
+                            "rowLabel": "taskData__labelVector",
+                            "columnLabel": "taskData__labelVector"
+                        }
+                    },
+                    "2": {
+                        "name": "Ergebnis",
+                        "type": "Matrix",
+                        "isValid": false,
+                        "dependencies": { "Matrix": { "data": "taskData__adjacencyMatrix" } },
+                        "methods": { "fillZeros": "Ergänze Nullen", "showSolution": "Zeige Lösung", "copyToClipboard": "Kopieren" },
+                        "component": {
+                            "initialize": {
+                                "validation": {
+                                    "operations": [{ "name": "subtract", "args": ["chain"] }],
+                                    "paths": ["nodes__3__components__1__component__validationData", "taskData__adjacencyMatrix"]
+                                },
+                                "user": {
+                                    "operations": [
+                                        { "name": "subtract", "args": ["chain"] },
+                                        { "name": "getValueInitializedMatrix", "args": [null] }
+                                    ],
+                                    "paths": ["nodes__3__components__1__component__validationData", "taskData__adjacencyMatrix"]
+                                }
+                            },
+                            "userData": null,
+                            "validationData": null,
+                            "readOnly": false,
+                            "rowLabel": "taskData__labelVector",
+                            "columnLabel": "taskData__labelVector"
+                        }
+                    }
+                }
+            },
+            "4": {
+                "zoomScale": 1,
+                "layouts": {
+                    "sm": [{ "x": 12, "y": 5, "w": 2, "h": 5, "i": 2, "static": false }],
+                    "md": [{ "x": 0, "y": 10, "w": 2, "h": 5, "i": 2, "static": false }],
+
+                    "lg": [
+                        { "x": 32, "y": 30, "w": 2, "h": 2, "i": 0, "static": false },
+                        { "x": 34, "y": 30, "w": 2, "h": 2, "i": 1, "static": false }
+                    ]
+                },
+                "hints": {
+                    "active": false,
+                    "current": 0,
+                    "descriptions": ["In diesem Schritt muss das Inverse der zuvor berechneten Matrix gebildet werden."]
+                },
+                "components": {
+                    "0": {
+                        "name": "Ergebnis",
+                        "type": "Matrix",
+                        "isValid": false,
+                        "dependencies": { "Matrix": { "data": "taskData__adjacencyMatrix" } },
+                        "methods": { "fillZeros": "Ergänze Nullen", "showSolution": "Zeige Lösung", "copyToClipboard": "Kopieren" },
+                        "component": {
+                            "initialize": {
+                                "validation": {
+                                    "operations": [],
+                                    "paths": ["nodes__3__components__2__component__validationData"]
+                                },
+                                "user": {
+                                    "operations": [],
+                                    "paths": ["nodes__3__components__2__component__validationData"]
+                                }
+                            },
+                            "userData": null,
+                            "validationData": null,
+                            "readOnly": true,
+                            "rowLabel": "taskData__labelVector",
+                            "columnLabel": "taskData__labelVector"
+                        }
+                    },
+                    "1": {
+                        "name": "Inverse Matrix",
+                        "type": "Matrix",
+                        "isValid": false,
+                        "dependencies": { "Matrix": { "data": "nodes__3__components__2__component__validationData" } },
+                        "methods": { "fillZeros": "Ergänze Nullen", "showSolution": "Zeige Lösung", "copyToClipboard": "Kopieren" },
+                        "component": {
+                            "initialize": {
+                                "validation": {
+                                    "operations": [{ "name": "getInverse", "args": [] }],
+                                    "paths": ["nodes__3__components__2__component__validationData"]
+                                },
+                                "user": {
+                                    "operations": [
+                                        { "name": "getInverse", "args": [] },
+                                        { "name": "getValueInitializedMatrix", "args": [null] }
+                                    ],
+                                    "paths": ["nodes__3__components__2__component__validationData"]
+                                }
+                            },
+                            "userData": null,
+                            "validationData": null,
+                            "readOnly": false,
+                            "rowLabel": "taskData__labelVector",
+                            "columnLabel": "taskData__labelVector"
+                        }
+                    }
+                }
+            },
+            "5": {
+                "zoomScale": 1,
+                "layouts": {
+                    "sm": [{ "x": 12, "y": 5, "w": 2, "h": 5, "i": 2, "static": false }],
+                    "md": [{ "x": 0, "y": 10, "w": 2, "h": 5, "i": 2, "static": false }],
+
+                    "lg": [
+                        { "x": 32, "y": 31, "w": 2, "h": 2, "i": 0, "static": false },
+                        { "x": 34, "y": 29, "w": 1, "h": 2, "i": 1, "static": false },
+                        { "x": 34, "y": 31, "w": 1, "h": 2, "i": 2, "static": false }
+                    ]
+                },
+                "hints": {
+                    "active": false,
+                    "current": 0,
+                    "descriptions": [
+                        "Zuletzt wird die Gesamtbedarfsmatrix mit dem Primärbedarfsvektor multipliziert um den Sekundärbedarfsvektor zu bilden."
+                    ]
+                },
+                "modals": [
+                    {
+                        "trigger": {
+                            "type": "success"
+                        },
+                        "content": {
+                            "header": "Herzlichen Glückwunsch!",
+                            "body": "Sie haben die Aufgabe erfolgreich gelöst!",
+                            "footer": {
+                                "buttons": [
+                                    { "type": "close", "label": "Zurück", "parameters": {} },
+                                    { "type": "route", "label": "Zur Übersicht", "parameters": { "route": "TaskOverview" } }
+                                ]
+                            }
+                        },
+                        "active": false
+                    }
+                ],
+                "components": {
+                    "0": {
+                        "name": "Inverse Matrix",
+                        "type": "Matrix",
+                        "isValid": true,
+                        "dependencies": { "Matrix": { "data": "nodes__4__components__1__component__validationData" } },
+                        "methods": { "copyToClipboard": "Kopieren" },
+                        "component": {
+                            "initialize": {
+                                "validation": {
+                                    "operations": [],
+                                    "paths": ["nodes__4__components__1__component__validationData"]
+                                },
+                                "user": {
+                                    "operations": [],
+                                    "paths": ["nodes__4__components__1__component__validationData"]
+                                }
+                            },
+                            "userData": null,
+                            "validationData": null,
+                            "readOnly": true,
+                            "rowLabel": "taskData__labelVector",
+                            "columnLabel": "taskData__labelVector"
+                        }
+                    },
+                    "1": {
+                        "name": "Primärbedarfsvektor",
+                        "type": "Matrix",
+                        "isValid": true,
+                        "dependencies": { "Matrix": { "data": "taskData__valueVector", "label": "taskData__labelVector" } },
+                        "methods": { "fillZeros": "Ergänze Nullen", "showSolution": "Zeige Lösung", "copyToClipboard": "Kopieren" },
+                        "component": {
+                            "initialize": {
+                                "validation": {
+                                    "operations": [],
+                                    "paths": ["taskData__valueVector"]
+                                },
+                                "user": {
+                                    "operations": [],
+                                    "paths": ["taskData__valueVector"]
+                                }
+                            },
+                            "userData": null,
+                            "validationData": null,
+                            "readOnly": true,
+                            "rowLabel": "taskData__labelVector",
+                            "columnLabel": ""
+                        }
+                    },
+                    "2": {
+                        "name": "Sekundärbedarfsvektor",
+                        "type": "Matrix",
+                        "isValid": false,
+                        "dependencies": { "Matrix": { "data": "taskData__valueVector", "label": "taskData__labelVector" } },
+                        "methods": { "fillZeros": "Ergänze Nullen", "showSolution": "Zeige Lösung", "copyToClipboard": "Kopieren" },
+                        "component": {
+                            "initialize": {
+                                "validation": {
+                                    "operations": [{ "name": "multiply", "args": ["chain"] }],
+                                    "paths": [
+                                        "nodes__5__components__0__component__validationData",
+                                        "nodes__5__components__1__component__validationData"
+                                    ]
+                                },
+                                "user": {
+                                    "operations": [{ "name": "getValueInitializedMatrix", "args": [null] }],
+                                    "paths": ["taskData__valueVector"]
+                                }
+                            },
+                            "userData": null,
+                            "validationData": null,
+                            "readOnly": false,
+                            "rowLabel": "taskData__labelVector",
+                            "columnLabel": ""
+                        }
+                    }
+                }
+            },
+            "6": {
+                "zoomScale": 1,
+                "layouts": {
+                    "sm": [{ "x": 12, "y": 5, "w": 2, "h": 5, "i": 2, "static": false }],
+                    "md": [{ "x": 0, "y": 10, "w": 2, "h": 5, "i": 2, "static": false }],
+                    "lg": [
+                        { "x": 32, "y": 30, "w": 2, "h": 2, "i": 0, "static": false },
+                        { "x": 34, "y": 30, "w": 2, "h": 2, "i": 1, "static": false }
+                    ]
+                },
+                "hints": {
+                    "active": false,
+                    "current": 0,
+                    "descriptions": [
+                        "Lies zunächst die Direktbedarfsmatrix aus dem Graphen ab. Diese entspricht der <a target=\"_blank\" href=\"https://de.wikipedia.org/wiki/Adjazenzmatrix\">Adjazenzmatrix</a>."
+                    ]
+                },
+                "components": {
+                    "0": {
+                        "name": "Direktbedarfsmatrix",
+                        "type": "Matrix",
+                        "isValid": false,
+                        "dependencies": { "Matrix": { "data": "taskData__adjacencyMatrix" } },
+                        "methods": { "fillZeros": "Ergänze Nullen", "showSolution": "Zeige Lösung", "copyToClipboard": "Kopieren" },
+                        "component": {
+                            "initialize": {
+                                "validation": {
+                                    "operations": [],
+                                    "paths": ["taskData__adjacencyMatrix"]
+                                },
+                                "user": {
+                                    "operations": [{ "name": "getValueInitializedMatrix", "args": [null] }],
+                                    "paths": ["taskData__adjacencyMatrix"]
+                                }
+                            },
+                            "userData": null,
+                            "validationData": null,
+                            "readOnly": false,
+                            "rowLabel": "taskData__labelVector",
+                            "columnLabel": "taskData__labelVector"
+                        }
+                    },
+                    "1": {
+                        "type": "DOTGraph",
+                        "name": "Gozintograph",
+                        "isValid": true,
+                        "dependencies": { "DOTGraph": { "dotDescription": "taskData__dotDescription" } },
+                        "component": {}
+                    }
+                }
+            },
+            "7": {
+                "zoomScale": 1,
+                "layouts": {
+                    "sm": [
+                        { "x": 32, "y": 30, "w": 2, "h": 2, "i": 0, "static": false },
+                        { "x": 34, "y": 30, "w": 2, "h": 2, "i": 1, "static": false },
+                        { "x": 36, "y": 28, "w": 1, "h": 2, "i": 2, "static": false },
+                        { "x": 36, "y": 30, "w": 1, "h": 2, "i": 3, "static": false }
+                    ],
+                    "md": [
+                        { "x": 32, "y": 30, "w": 2, "h": 2, "i": 0, "static": false },
+                        { "x": 34, "y": 30, "w": 2, "h": 2, "i": 1, "static": false },
+                        { "x": 36, "y": 28, "w": 1, "h": 2, "i": 2, "static": false },
+                        { "x": 36, "y": 30, "w": 1, "h": 2, "i": 3, "static": false }
+                    ],
+                    "lg": [
+                        { "x": 32, "y": 30, "w": 2, "h": 2, "i": 0, "static": false },
+                        { "x": 34, "y": 30, "w": 2, "h": 2, "i": 1, "static": false },
+                        { "x": 36, "y": 28, "w": 1, "h": 2, "i": 2, "static": false },
+                        { "x": 36, "y": 30, "w": 1, "h": 2, "i": 3, "static": false }
+                    ]
+                },
+                "hints": {
+                    "active": false,
+                    "current": 0,
+                    "descriptions": [
+                        "Multipliziere gegebenfalls die dargestellten Direktbedarfsmatrizen in Reihenfolge auf. Addiere anschließend die n'ten Direktbedarfsmatrizen mit der Einheitsmatrix, um die Gesamtbedarfsmatrix zu erhalten.<br> Multipliziere diese daraufhin mit dem Primärbedarfsvektor um den Sekundärbedarfsvektor zu erhalten."
+                    ]
+                },
+                "interjections": [
+                    {
+                        "method": "matrixSelfMultiplication",
+                        "dependencies": { "baseMatrix": "nodes__7__components__0", "n": "taskData__longestPath" },
+                        "applied": false
+                    }
+                ],
+                "modals": [
+                    {
+                        "trigger": {
+                            "type": "success"
+                        },
+                        "content": {
+                            "header": "Herzlichen Glückwunsch!",
+                            "body": "Sie haben die Aufgabe erfolgreich gelöst!",
+                            "footer": {
+                                "buttons": [
+                                    { "type": "close", "label": "Zurück", "parameters": {} },
+                                    { "type": "route", "label": "Zur Übersicht", "parameters": { "route": "TaskOverview" } }
+                                ]
+                            }
+                        },
+                        "active": false
+                    }
+                ],
+                "components": {
+                    "0": {
+                        "name": "Direktbedarfsmatrix",
+                        "type": "Matrix",
+                        "isValid": true,
+                        "dependencies": { "Matrix": { "data": "taskData__adjacencyMatrix" } },
+                        "methods": { "copyToClipboard": "Kopieren" },
+                        "component": {
+                            "initialize": {
+                                "validation": {
+                                    "operations": [],
+                                    "paths": ["taskData__adjacencyMatrix"]
+                                },
+                                "user": {
+                                    "operations": [],
+                                    "paths": ["taskData__adjacencyMatrix"]
+                                }
+                            },
+                            "userData": null,
+                            "validationData": null,
+                            "readOnly": true,
+                            "rowLabel": "taskData__labelVector",
+                            "columnLabel": "taskData__labelVector"
+                        }
+                    },
+                    "1": {
+                        "name": "Einheitsmatrix",
+                        "type": "Matrix",
+                        "isValid": true,
+                        "dependencies": { "Matrix": { "data": "taskData__adjacencyMatrix" } },
+                        "methods": { "copyToClipboard": "Kopieren" },
+                        "component": {
+                            "initialize": {
+                                "validation": {
+                                    "operations": [{ "name": "getIdentity", "args": [null] }],
+                                    "paths": ["taskData__adjacencyMatrix"]
+                                },
+                                "user": {
+                                    "operations": [{ "name": "getIdentity", "args": [null] }],
+                                    "paths": ["taskData__adjacencyMatrix"]
+                                }
+                            },
+                            "userData": null,
+                            "validationData": null,
+                            "readOnly": true,
+                            "rowLabel": "taskData__labelVector",
+                            "columnLabel": "taskData__labelVector"
+                        }
+                    },
+                    "2": {
+                        "name": "Primärbedarfsvektor",
+                        "type": "Matrix",
+                        "isValid": true,
+                        "dependencies": { "Matrix": { "data": "taskData__valueVector", "label": "taskData__labelVector" } },
+                        "methods": { "fillZeros": "Ergänze Nullen", "showSolution": "Zeige Lösung", "copyToClipboard": "Kopieren" },
+                        "component": {
+                            "initialize": {
+                                "validation": {
+                                    "operations": [],
+                                    "paths": ["taskData__valueVector"]
+                                },
+                                "user": {
+                                    "operations": [],
+                                    "paths": ["taskData__valueVector"]
+                                }
+                            },
+                            "userData": null,
+                            "validationData": null,
+                            "readOnly": true,
+                            "rowLabel": "taskData__labelVector",
+                            "columnLabel": ""
+                        }
+                    },
+                    "3": {
+                        "name": "Sekundärbedarfsvektor",
+                        "type": "Matrix",
+                        "isValid": false,
+                        "dependencies": { "Matrix": { "data": "taskData__valueVector", "label": "taskData__labelVector" } },
+                        "methods": { "fillZeros": "Ergänze Nullen", "showSolution": "Zeige Lösung", "copyToClipboard": "Kopieren" },
+                        "component": {
+                            "initialize": {
+                                "validation": {
+                                    "operations": [],
+                                    "paths": ["taskData__solution"]
+                                },
+                                "user": {
+                                    "operations": [{ "name": "getValueInitializedMatrix", "args": [null] }],
+                                    "paths": ["taskData__valueVector"]
+                                }
+                            },
+                            "userData": null,
+                            "validationData": null,
+                            "readOnly": false,
+                            "rowLabel": "taskData__labelVector",
+                            "columnLabel": ""
+                        }
+                    }
+                }
+            },
+            "8": {
+                "zoomScale": 1,
+                "layouts": {
+                    "sm": [{ "x": 12, "y": 5, "w": 2, "h": 5, "i": 2, "static": false }],
+                    "md": [{ "x": 0, "y": 10, "w": 2, "h": 5, "i": 2, "static": false }],
+                    "lg": [
+                        { "x": 32, "y": 30, "w": 2, "h": 2, "i": 0, "static": false },
+                        { "x": 34, "y": 30, "w": 2, "h": 2, "i": 1, "static": false },
+                        { "x": 36, "y": 30, "w": 1, "h": 2, "i": 2, "static": false },
+                        { "x": 37, "y": 30, "w": 1, "h": 2, "i": 3, "static": false },
+                        { "x": 32, "y": 32, "w": 4, "h": 2, "i": 4, "static": false }
+                    ]
+                },
+                "hints": {
+                    "active": false,
+                    "current": 0,
+                    "descriptions": [
+                        "Finde zunächst alle Pfade des Graphen, indem du die jeweiligen Kanten des Graphen anklickst. <br> Du hast alle Pfade gefunden, wenn alle Kanten grün sind.",
+                        "<br>Bilde nun die Zwischensummen für jeden Knoten, indem du entgegen der Kantenrichtung die Bedarfe mit den Kantengewichten multiplizierst. <br>Als Gedankenstütze kannst du die Zwischenprodukte innerhalb des Textfelds aufschreiben. <br> Übertrage zuletzt die errechneten Werte der jeweiligen Knoten in den Sekundärbedarfsvektor."
+                    ]
+                },
+                "modals": [
+                    {
+                        "trigger": {
+                            "type": "success"
+                        },
+                        "content": {
+                            "header": "Herzlichen Glückwunsch!",
+                            "body": "Sie haben die Aufgabe erfolgreich gelöst!",
+                            "footer": {
+                                "buttons": [
+                                    { "type": "close", "label": "Zurück", "parameters": {} },
+                                    { "type": "route", "label": "Zur Übersicht", "parameters": { "route": "TaskOverview" } }
+                                ]
+                            }
+                        },
+                        "active": false
+                    }
+                ],
+                "components": {
+                    "0": {
+                        "name": "Traversal",
+                        "type": "VisualGraphTraversal",
+                        "isValid": true,
+                        "dependencies": {
+                            "DOTGraph": { "dotDescription": "taskData__dotDescription" },
+                            "VisualGraphTraversal": {
+                                "nodes": "taskData__nodes",
+                                "paths": "taskData__paths",
+                                "dotDescription": "taskData__dotDescription"
+                            }
+                        },
+                        "component": {
+                            "selectedPaths": [],
+                            "colorCoding": {
+                                "standard": "black",
+                                "completed": "green",
+                                "selected": "red",
+                                "partial": "blue"
+                            }
+                        }
+                    },
+                    "1": {
+                        "type": "PathDisplay",
+                        "name": "display",
+                        "isValid": true,
+                        "dependencies": {
+                            "PathDisplay": {
+                                "selectedPaths": "nodes__8__components__0__component__selectedPaths",
+                                "nodes": "taskData__nodes"
+                            }
+                        },
+                        "component": {}
+                    },
+                    "2": {
+                        "name": "Primärbedarfsvektor",
+                        "type": "Matrix",
+                        "isValid": true,
+                        "dependencies": { "Matrix": { "data": "taskData__valueVector", "label": "taskData__labelVector" } },
+                        "methods": { "fillZeros": "Ergänze Nullen", "showSolution": "Zeige Lösung", "copyToClipboard": "Kopieren" },
+                        "component": {
+                            "initialize": {
+                                "validation": {
+                                    "operations": [],
+                                    "paths": ["taskData__valueVector"]
+                                },
+                                "user": {
+                                    "operations": [],
+                                    "paths": ["taskData__valueVector"]
+                                }
+                            },
+                            "userData": null,
+                            "validationData": null,
+                            "readOnly": true,
+                            "rowLabel": "taskData__labelVector",
+                            "columnLabel": ""
+                        }
+                    },
+                    "3": {
+                        "name": "Sekundärbedarfsvektor",
+                        "type": "Matrix",
+                        "isValid": false,
+                        "dependencies": { "Matrix": { "data": "taskData__valueVector", "label": "taskData__labelVector" } },
+                        "methods": { "fillZeros": "Ergänze Nullen", "showSolution": "Zeige Lösung", "copyToClipboard": "Kopieren" },
+                        "component": {
+                            "initialize": {
+                                "validation": {
+                                    "operations": [],
+                                    "paths": ["taskData__solution"]
+                                },
+                                "user": {
+                                    "operations": [{ "name": "getValueInitializedMatrix", "args": [null] }],
+                                    "paths": ["taskData__valueVector"]
+                                }
+                            },
+                            "userData": null,
+                            "validationData": null,
+                            "readOnly": false,
+                            "rowLabel": "taskData__labelVector",
+                            "columnLabel": ""
+                        }
+                    },
+                    "4": {
+                        "name": "Rechenhilfe",
+                        "type": "TextArea",
+                        "isValid": true,
+                        "component": {
+                            "value": ""
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

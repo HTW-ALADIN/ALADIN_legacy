@@ -1,0 +1,51 @@
+{
+    "name": "backend",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "run": "ts-node orchestrator.ts",
+        "dev": "ts-node-dev --transpile-only --poll --respawn orchestrator.ts",
+        "compile": "tsc",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "debug": "cross-env TZ=UTC NODE_ENV=development tsnd --inspect --respawn workers/MunkeltWorker.ts"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@hpcc-js/wasm": "^1.5.2",
+        "@types/amqplib": "^0.5.16",
+        "@types/minio": "^7.0.7",
+        "@types/mongoose": "^5.10.2",
+        "@types/node": "^14.14.10",
+        "@types/pg": "^7.14.7",
+        "@types/seedrandom": "^2.4.28",
+        "amqplib": "^0.6.0",
+        "aws-sdk": "^2.806.0",
+        "axios": "^0.21.4",
+        "dotenv": "^8.2.0",
+        "huggingface": "^1.3.0",
+        "lodash": "^4.17.21",
+        "minio": "^7.0.18",
+        "mongoose": "^5.11.5",
+        "n-lines": "^1.0.5",
+        "node": "^15.3.0",
+        "pg": "^8.5.1",
+        "pgsql-ast-parser": "^11.0.0",
+        "pubchem": "^1.0.0",
+        "rabbitmq-rpc-wrapper": "^0.2.6",
+        "randexp": "^0.5.3",
+        "reflect-metadata": "^0.1.13",
+        "seedrandom": "^3.0.5",
+        "simplex-noise": "^2.4.0",
+        "tau-prolog": "^0.3.1",
+        "ts-node": "^9.1.1",
+        "ts-node-dev": "^1.1.6",
+        "tslint": "^6.1.3",
+        "typescript": "^4.1.2"
+    },
+    "devDependencies": {
+        "@types/lodash": "^4.14.191"
+    }
+}
