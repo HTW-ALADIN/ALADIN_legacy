@@ -13,6 +13,7 @@ backend/services/mongodb/*
 !backend/services/mongodb/mongodb.Dockerfile
 backend/services/nginx/*
 !backend/services/nginx/nginx.Dockerfile
+!backend/services/nginx/nginx.conf
 backend/services/postgres/*
 !backend/services/postgres/postgres.Dockerfile
 backend/services/rabbitmq/*
