@@ -8,6 +8,33 @@
 
 ## Setup environment variables
 
+Enter folder 'backend' and create a file `.env` with the following content:
+
+```bash
+brokerConnection=amqp://guest:guest@rabbitmq:5672
+mongooseConnection=mongodb://admin:admin@localhost:27017/?authSource=admin
+postgresConnection=postgresql://admin:admin@postgres:5432
+MINIO_ACCESS_KEY=minio_access_key
+MINIO_SECRED_KEY=minio_secret_key
+
+HUGGINGFACE_TOKEN=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
+```
+
+Enter folder 'server' and create a file `.env` with the following content:
+
+```bash
+AMQP_BROKER=amqp://guest:guest@rabbitmq:5672
+MONGODBCONNECTION=user:user@mongodb:27017
+APIHOST=reverse-proxy:80
+PORT=8000
+
+DB_HOST=localhost
+DB_NAME=ltidb
+DB_USER=aladin
+DB_PASS=aladin
+LTI_KEY=opaladin
+```
+
 ## Install dependencies
 
 Enter the folders `/backend`, `/server`, `/frontend` and each execute the following command:

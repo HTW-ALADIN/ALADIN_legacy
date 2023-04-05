@@ -33,7 +33,7 @@ const establishBrokerConnection = async (): Promise<{ connection: any; channel: 
 	let connection;
 	let channel: Channel;
 	try {
-		connection = await amqp.connect("amqp://guest:guest@rabbitmq:5672"); //process.env.brokerConnection
+		connection = await amqp.connect("amqp://guest:guest@rabbitmq_1:5672"); //process.env.brokerConnection
 		channel = await connection.createChannel();
 	} catch (error) {
 		if (retries) {
