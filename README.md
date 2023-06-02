@@ -1,3 +1,5 @@
+# !! NOTE !! This is the legacy ALADIN application, the code has been transfered to their respective repositories. See CARPET and LOOM for the frontend code and ALADIN for the backend code.
+
 # Setup for development
 
 ## Requirements
